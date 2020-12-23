@@ -1,0 +1,21 @@
+{
+  "name": "lambdafunctiondevelopmenttemplate",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "test": "mocha -r dotenv/config index.test.js",
+    "zip": "zip -q lambda.zip ./**/**",
+    "create": "dotenv -- cross-var aws lambda create-function --runtime nodejs12.x --handler index.handler --function-name %FUNCTION_NAME% --role %ARN_ROLE% --zip-file fileb://lambda.zip",
+    "deploy:env": "dotenv -- cross-var aws lambda update-function-configuration --function-name %FUNCTION_NAME% --environment \"%VARIABLES%\"",
+    "deploy:code": "yarn zip && dotenv -- cross-var aws lambda update-function-code --function-name %FUNCTION_NAME% --zip-file fileb://lambda.zip",
+    "deploy": "yarn zip && yarn deploy:env && yarn deploy:code"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "cross-var": "^1.1.0",
+    "dotenv-cli": "^4.0.0",
+    "mocha": "^8.2.1"
+  }
+}
