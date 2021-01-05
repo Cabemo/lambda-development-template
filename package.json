@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "test": "mocha -r dotenv/config index.test.js",
-    "zip": "zip -q lambda.zip ./**/**",
+    "zip": "zip -q lambda.zip ./*",
     "create": "dotenv -- cross-var aws lambda create-function --runtime nodejs12.x --handler index.handler --function-name %FUNCTION_NAME% --role %ARN_ROLE% --zip-file fileb://lambda.zip",
     "deploy:env": "dotenv -- cross-var aws lambda update-function-configuration --function-name %FUNCTION_NAME% --environment \"%VARIABLES%\"",
     "deploy:code": "yarn zip && dotenv -- cross-var aws lambda update-function-code --function-name %FUNCTION_NAME% --zip-file fileb://lambda.zip",
