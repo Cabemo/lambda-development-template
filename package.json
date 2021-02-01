@@ -4,16 +4,23 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "test": "mocha -r dotenv/config index.test.js",
-    "zip": "zip -q lambda.zip ./*",
+    "test": "mocha -timeout 30000 -node -exit -r dotenv/config index.test.js",
+    "zip": "zip -r -x database.sql -x credentials.csv -x docker-compose.yml -x index.test.js -q lambda.zip ./*",
     "create": "dotenv -- cross-var aws lambda create-function --runtime nodejs12.x --handler index.handler --function-name %FUNCTION_NAME% --role %ARN_ROLE% --zip-file fileb://lambda.zip",
     "deploy:env": "dotenv -- cross-var aws lambda update-function-configuration --function-name %FUNCTION_NAME% --environment \"%VARIABLES%\"",
-    "deploy:code": "yarn zip && dotenv -- cross-var aws lambda update-function-code --function-name %FUNCTION_NAME% --zip-file fileb://lambda.zip",
-    "deploy": "yarn zip && yarn deploy:env && yarn deploy:code"
+    "deploy:code": "dotenv -- cross-var aws lambda update-function-code --function-name %FUNCTION_NAME% --zip-file fileb://lambda.zip",
+    "deploy": "yarn deploy:env && yarn deploy:code"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@cabemo/op": "^1.0.8",
+    "googleapis": "^67.0.0",
+    "luxon": "^1.25.0",
+    "mysql2-promise": "^0.1.4",
+    "nodemailer": "^6.4.17"
+  },
   "devDependencies": {
     "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
     "cross-var": "^1.1.0",
     "dotenv-cli": "^4.0.0",
     "mocha": "^8.2.1"
